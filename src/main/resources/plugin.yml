@@ -1,0 +1,6 @@
+name: SmaticTimber
+version: '${project.version}'
+main: me.corxl.smatictimber.SmaticTimber
+api-version: 1.18
+authors: [ Corxl ]
+description: Timer plugin
