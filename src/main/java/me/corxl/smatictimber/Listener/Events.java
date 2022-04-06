@@ -87,7 +87,9 @@ public class Events implements Listener {
     @EventHandler
     public void onRightClick(PlayerInteractEvent event) {
         if (!event.getPlayer().isSneaking()) return;
-        if (!event.getPlayer().getInventory().getItemInMainHand().getType().name().contains("AXE")) return;
+        if (event.getAction().isLeftClick()) return;
+        if (event.getItem()==null) return;
+        if (!event.getItem().getType().name().contains("AXE") || event.getItem().getType().name().contains("PICK")) return;
         if (event.getClickedBlock()!=null) return;
         event.setCancelled(true);
         PersistentDataContainer container = event.getPlayer().getPersistentDataContainer();
