@@ -6,6 +6,7 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -26,8 +27,9 @@ public class Events implements Listener {
     }
     public static HashSet<String> placedBlocks = new HashSet<>();
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.MONITOR)
     public void onWoodBreak(BlockBreakEvent event) {
+        if (event.isCancelled()) return;
         if (!event.getBlock().getType().name().contains("LOG")||event.getBlock().getType().name().contains("STRIPPED")) return;
         if (!event.getPlayer().getInventory().getItemInMainHand().getType().name().contains("AXE")) return;
         if (!event.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) return;
@@ -46,15 +48,17 @@ public class Events implements Listener {
     }
 
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.MONITOR)
     public void onPlacedWoodBreak(BlockBreakEvent event) {
+        if (event.isCancelled()) return;
         if (!event.getBlock().getType().name().contains("LOG")) return;
         if (!placedBlocks.contains(event.getBlock().toString())) return;
         placedBlocks.remove(event.getBlock().getLocation().toString());
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.MONITOR)
     public void onWoodPlaced(BlockPlaceEvent event) {
+        if (event.isCancelled()) return;
         if (!event.getBlock().getType().name().contains("LOG")) return;
         placedBlocks.add(event.getBlock().getLocation().toString());
     }
@@ -74,7 +78,7 @@ public class Events implements Listener {
                             if (count%multiplier==0) {
                                 axe.setDurability((short) (axe.getDurability()+1));
                             }
-                            if (axe.getDurability()>=axe.getData().getItemType().getMaxDurability())
+                            if (axe.getDurability()>=axe.getType().getMaxDurability())
                                 return;
                             b.breakNaturally(axe);
                             count++;
